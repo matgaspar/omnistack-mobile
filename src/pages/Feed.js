@@ -143,6 +143,6 @@ const styles = StyleSheet.create({
     color: '#000'
   },
   hashtags: {
-    color: '#7159C1'
+    color: '#235ab2'
   }
 });
