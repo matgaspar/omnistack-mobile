@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import api from '../services/api';
 import ImagePicker from 'react-native-image-picker';
-
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity, Image, KeyboardAvoidingView } from 'react-native';
 
 
 export default class New extends Component {
@@ -23,11 +22,11 @@ export default class New extends Component {
     ImagePicker.showImagePicker({
       title: 'Selecionar imagem',
     }, upload => {
-      if(upload.error){
+      if (upload.error) {
         console.log(upload);
-      }else if(upload.didCancel){
+      } else if (upload.didCancel) {
         console.log('User canceled')
-      }else{
+      } else {
         const preview = {
           uri: `data:image/jpeg;base64,${upload.data}`
         }
@@ -35,10 +34,10 @@ export default class New extends Component {
         let prefix;
         let ext;
 
-        if(upload.fileName){
+        if (upload.fileName) {
           [prefix, ext] = upload.fileName.split('.');
-          ext = ext.toLocaleLowerCase() === 'heic' ? 'jpg': ext;
-        }else {
+          ext = ext.toLocaleLowerCase() === 'heic' ? 'jpg' : ext;
+        } else {
           prefix = new Date().getTime();
           ext = 'jpg';
         }
@@ -70,53 +69,59 @@ export default class New extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.selectButton} onPress={this.handleSelectImage}>
-          <Text style={styles.selectButtonText}>Selecionar imagem</Text>
-        </TouchableOpacity>
+      <KeyboardAvoidingView 
+        style={{ flex: 1 }}
+        // keyboardVerticalOffset={Header.HEIGHT + 20}
+        // behavior={null}
+      >
+        <ScrollView style={styles.container}>
+          {this.state.preview ? <Image style={styles.preview} source={this.state.preview} /> : <View style={styles.preview}></View>}
 
-        { this.state.preview && <Image style={styles.preview} source={this.state.preview} /> }
+          <TouchableOpacity style={styles.selectButton} onPress={this.handleSelectImage}>
+            <Text style={styles.selectButtonText}>Selecionar imagem</Text>
+          </TouchableOpacity>
 
-        <TextInput 
-          style={styles.input}
-          autoCorrect={false}
-          autoCapitalize='none'
-          placeholder='Nome do autor'
-          placeholderTextColor='#999'
-          value={this.state.author}
-          onChangeText={author => this.setState({ author })}
-        />
-        <TextInput 
-          style={styles.input}
-          autoCorrect={false}
-          autoCapitalize='none'
-          placeholder='Local da foto'
-          placeholderTextColor='#999'
-          value={this.state.place}
-          onChangeText={place => this.setState({ place })}
-        />
-        <TextInput 
-          style={styles.input}
-          autoCorrect={false}
-          autoCapitalize='none'
-          placeholder='Descrição'
-          placeholderTextColor='#999'
-          value={this.state.description}
-          onChangeText={description => this.setState({ description })}
-        />
-        <TextInput 
-          style={styles.input}
-          autoCorrect={false}
-          autoCapitalize='none'
-          placeholder='Hashtags'
-          placeholderTextColor='#999'
-          value={this.state.hashtags}
-          onChangeText={hashtags => this.setState({ hashtags })}
-        />
-        <TouchableOpacity style={styles.shareButton} onPress={this.handleSubmit}>
-          <Text style={styles.shareButtonText}>Compartilhar</Text>
-        </TouchableOpacity>
-      </View>
+          <TextInput
+            style={styles.input}
+            autoCorrect={false}
+            autoCapitalize='none'
+            placeholder='Nome do autor'
+            placeholderTextColor='#999'
+            value={this.state.author}
+            onChangeText={author => this.setState({ author })}
+          />
+          <TextInput
+            style={styles.input}
+            autoCorrect={false}
+            autoCapitalize='none'
+            placeholder='Local da foto'
+            placeholderTextColor='#999'
+            value={this.state.place}
+            onChangeText={place => this.setState({ place })}
+          />
+          <TextInput
+            style={styles.input}
+            autoCorrect={false}
+            autoCapitalize='none'
+            placeholder='Descrição'
+            placeholderTextColor='#999'
+            value={this.state.description}
+            onChangeText={description => this.setState({ description })}
+          />
+          <TextInput
+            style={styles.input}
+            autoCorrect={false}
+            autoCapitalize='none'
+            placeholder='Hashtags'
+            placeholderTextColor='#999'
+            value={this.state.hashtags}
+            onChangeText={hashtags => this.setState({ hashtags })}
+          />
+          <TouchableOpacity style={styles.shareButton} onPress={this.handleSubmit}>
+            <Text style={styles.shareButtonText}>Compartilhar</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -145,9 +150,9 @@ const styles = StyleSheet.create({
   },
 
   preview: {
-    width: 100,
-    height: 100,
-    marginTop: 10,
+    width: 200,
+    height: 200,
+    marginBottom: 10,
     alignSelf: 'center',
     borderRadius: 4,
   },
